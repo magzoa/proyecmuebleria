@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html ng-app="registroUsuario">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -31,9 +29,11 @@ angular.module("registroUsuario").controller("usuarioController",function($scope
 $scope.registrarUsuario=function(usuario){
 	
 	$http.post("http://localhost:8080/proyectomuebleria/usuarios",usuario).success(function(){
+		
+		console.log(usuario);
 		delete $scope.usuario;
-		alert("Ingrese");
-		console.log("Ingrese en insertar");
+		cargarUsuarios();
+		
 	});
 	
 	
@@ -42,14 +42,17 @@ $scope.registrarUsuario=function(usuario){
 
 var cargarUsuarios=function(){
 	
-	$http.get("http://localhost:8080/proyectomuebleria/usuarios")
+	$http.get("http://localhost:8080/proyectomuebleria/usuarios.json").success(function(datos){
+		$scope.usuarios=datos.usuarios;
+		
+	});
 }
 
 
 
 
 
-	
+	cargarUsuarios();
 	
 });
 
@@ -99,11 +102,22 @@ max-height: 400px;
 </form>
 
 
-<table>
+<table class="table">
 
+<thead>
+<tr>
+<td>Correo</td>
+<td>Nombre</td>
+<td>Contraseña</td>
 
-<tbody class="scroll">
+</tr>
+
+</thead>
+
+<!-- class="scroll" -->
+<tbody >
 <tr ng-repeat="usuario in usuarios">
+
 <td>{{usuario.login}}</td>
 <td>{{usuario.name}}</td>
 <td>{{usuario.password}}</td>
